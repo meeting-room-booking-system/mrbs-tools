@@ -24,6 +24,6 @@ if (-d 'mrbs-'.$rel_ver)
 
 (system('zip','-rl','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver) == 0) or die "Failed to zip\n";
 
-(system('zip','-d','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/new.gif') == 0) or die "Failed to delete from zip\n";
+(system('zip','-d','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/images/*.*') == 0) or die "Failed to delete from zip\n";
 
-(system('zip','-u','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/new.gif') == 0) or die "Failed to update zip\n";
+(system('zip','-u','mrbs-'.$rel_ver.'.zip',glob('mrbs-'.$rel_ver.'/web/images/*')) == 0) or die "Failed to update zip\n";
