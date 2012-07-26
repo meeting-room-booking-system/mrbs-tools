@@ -3,6 +3,7 @@
 use MIME::Lite;
 use XML::Simple;
 use LWP::UserAgent;
+use FindBin;
 
 # Config
 my $project = 'mrbs';
@@ -45,7 +46,7 @@ foreach my $item (@{$xml_ref->{channel}->{item}})
 
 my @sorted_revisions = sort @revisions;
 
-my $last_rev_filename = "$project-$svn_repos.lastrev";
+my $last_rev_filename = "$FindBin::Bin/$project-$svn_repos.lastrev";
 my $last_rev = 0;
 my $ok = open LAST_REV,'<',$last_rev_filename;
 if ($ok)
