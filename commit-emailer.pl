@@ -7,7 +7,6 @@ use LWP::UserAgent;
 # Config
 my $project = 'mrbs';
 my $svn_repos = 'code';
-my $sf_username = 'jberanek';
 my @terse_recipients =
 (
   'mrbs-general@lists.sourceforge.net',
@@ -20,7 +19,7 @@ my @verbose_recipients =
 );
 
 # Calculated values
-my $repos_url = "svn+ssh://$sf_username\@svn.code.sf.net/p/$project/$svn_repos/";
+my $repos_url = "svn://svn.code.sf.net/p/$project/$svn_repos/";
 my $commit_url_base = "https://sourceforge.net/p/$project/$svn_repos/";
 my $rss_url = "${commit_url_base}feed";
 
