@@ -10,7 +10,7 @@ my $project = 'mrbs';
 my $svn_repos = 'code';
 my @terse_recipients =
 (
-  'mrbs-general@lists.sourceforge.net',
+ 'mrbs-general@lists.sourceforge.net',
 #  'jberanek',
 );
 my @verbose_recipients =
@@ -23,6 +23,25 @@ my @verbose_recipients =
 my $repos_url = "svn://svn.code.sf.net/p/$project/$svn_repos/";
 my $commit_url_base = "https://sourceforge.net/p/$project/$svn_repos/";
 my $rss_url = "${commit_url_base}feed";
+
+my $rev_range = shift;
+if ($rev_range)
+{
+  if ($rev_range =~ m/(\d+):(\d+)/)
+  {
+    $start_rev = $1;
+    $end_rev = $2;
+  }
+  elsif ($rev_range =~ m/(\d+)/)
+  {
+    $start_rev = $end_rev = $1;
+  }
+  for (my $rev = $start_rev; $rev <= $end_rev; $rev++)
+  {
+    email_commit($rev);
+  }
+  exit 0;
+} 
 
 my $ua = LWP::UserAgent->new;
 my $response = $ua->get($rss_url);
