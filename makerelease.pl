@@ -18,7 +18,7 @@ if (-d 'mrbs-'.$rel_ver)
 }
 
 (system('svn',
-        'export','https://mrbs.svn.sourceforge.net/svnroot/mrbs/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
+        'export','svn://svn.code.sf.net/p/mrbs/code/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
 
 (system('tar','zcvf','mrbs-'.$rel_ver.'.tar.gz','mrbs-'.$rel_ver) == 0) or die "Failed to tar\n";
 
