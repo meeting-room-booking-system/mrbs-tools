@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 # Config
-my $repos_base = 'svn://svn.code.sf.net/p/mrbs/code/';
+my $repos_base = 'svn+ssh://svn.code.sf.net/p/mrbs/code/';
 my $rel_ver = shift;
 my $user = shift || 'jberanek';
 

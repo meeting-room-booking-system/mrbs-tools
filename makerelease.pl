@@ -29,3 +29,6 @@ if (-d 'mrbs-'.$rel_ver)
 
 (system('zip','-d','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/jquery/ui/css/sunny/images/*.*') == 0) or die "Failed to delete from zip\n";
 (system('zip','-u','mrbs-'.$rel_ver.'.zip',glob('mrbs-'.$rel_ver.'/web/jquery/ui/css/sunny/images/*')) == 0) or die "Failed to update zip\n";
+
+(system('zip','-d','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/jquery/datatables/images/*.*') == 0) or die "Failed to delete from zip\n";
+(system('zip','-u','mrbs-'.$rel_ver.'.zip',glob('mrbs-'.$rel_ver.'/web/jquery/datatables/images/*')) == 0) or die "Failed to update zip\n";
