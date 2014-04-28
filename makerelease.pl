@@ -3,6 +3,11 @@
 use warnings;
 use strict;
 
+use File::Path 2.06;
+use File::Find;
+use Archive::Tar;
+use Archive::Zip;
+
 my $rel_ver = shift or die "No version specified!\n";
 my $user = shift || 'jberanek';
 
@@ -14,21 +19,65 @@ $tag = 'mrbs-'.$tag;
 
 if (-d 'mrbs-'.$rel_ver)
 {
-  (system('rm','-fr','mrbs-'.$rel_ver) == 0) or die "Failed to clean old export\n";
+  File::Path::remove_tree('mrbs-'.$rel_ver);
 }
 
 (system('svn',
-        'export','svn://svn.code.sf.net/p/mrbs/code/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
+        'export','http://svn.code.sf.net/p/mrbs/code/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
 
-(system('tar','zcvf','mrbs-'.$rel_ver.'.tar.gz','mrbs-'.$rel_ver) == 0) or die "Failed to tar\n";
+my $tar_filename = 'mrbs-'.$rel_ver.'.tar.gz';
+my $zip_filename = 'mrbs-'.$rel_ver.'.zip';
 
-(system('zip','-rl','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver) == 0) or die "Failed to zip\n";
+# Delete the old tar file, if it exists
+if (-f $tar_filename)
+{
+  unlink $tar_filename;
+}
 
-(system('zip','-d','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/images/*.*') == 0) or die "Failed to delete from zip\n";
-(system('zip','-u','mrbs-'.$rel_ver.'.zip',glob('mrbs-'.$rel_ver.'/web/images/*')) == 0) or die "Failed to update zip\n";
+# Delete the old ZIP file, if it exists
+if (-f $zip_filename)
+{
+  unlink $zip_filename;
+}
 
-(system('zip','-d','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/jquery/ui/css/sunny/images/*.*') == 0) or die "Failed to delete from zip\n";
-(system('zip','-u','mrbs-'.$rel_ver.'.zip',glob('mrbs-'.$rel_ver.'/web/jquery/ui/css/sunny/images/*')) == 0) or die "Failed to update zip\n";
+my $zip = Archive::Zip->new();
+my $tar = Archive::Tar->new();
 
-(system('zip','-d','mrbs-'.$rel_ver.'.zip','mrbs-'.$rel_ver.'/web/jquery/datatables/images/*.*') == 0) or die "Failed to delete from zip\n";
-(system('zip','-u','mrbs-'.$rel_ver.'.zip',glob('mrbs-'.$rel_ver.'/web/jquery/datatables/images/*')) == 0) or die "Failed to update zip\n";
+File::Find::find({no_chdir => 1, wanted => \&wanted}, 'mrbs-'.$rel_ver);
+
+$tar->write($tar_filename, COMPRESS_GZIP);
+$zip->writeToFileNamed($zip_filename);
+
+
+
+##
+# File::Find wanted function to build the ZIP and TAR release files
+sub wanted
+{
+  my $file = $_;
+
+  # Adding to the tar is simple...
+  $tar->add_files($File::Find::name);
+
+  # ... whereas the ZIP needs special treatment
+  if (-f $file)
+  {
+    # Binary files are added verbatim
+    if ($file =~ m/\.(gif|jpg|png|ics)$/)
+    {
+      $zip->addFile($File::Find::name);
+    }
+    else
+    {
+      # All other files we read in and convert to CRLF line endings
+
+      local $/ = undef;
+      open FILE,'<',$File::Find::name or
+        die "Failed to open '$File::Find::name' for reading!\n";
+      my $file_data = <FILE>;
+      close FILE;
+      $file_data =~ s/\n/\r\n/g;
+      $zip->addString($file_data, $File::Find::name);
+    }
+  }
+}
