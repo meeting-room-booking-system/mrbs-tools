@@ -6,7 +6,7 @@ use strict;
 use File::Path 2.06;
 use File::Find;
 use Archive::Tar;
-use Archive::Zip;
+use Archive::Zip qw(:CONSTANTS);
 
 my $rel_ver = shift or die "No version specified!\n";
 my $user = shift || 'jberanek';
@@ -17,13 +17,13 @@ $tag =~ s/\./_/g;
 
 $tag = 'mrbs-'.$tag;
 
-if (-d 'mrbs-'.$rel_ver)
-{
-  File::Path::remove_tree('mrbs-'.$rel_ver);
-}
+#if (-d 'mrbs-'.$rel_ver)
+#{
+#  File::Path::remove_tree('mrbs-'.$rel_ver);
+#}
 
-(system('svn',
-        'export','http://svn.code.sf.net/p/mrbs/code/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
+#(system('svn',
+#        'export','http://svn.code.sf.net/p/mrbs/code/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
 
 my $tar_filename = 'mrbs-'.$rel_ver.'.tar.gz';
 my $zip_filename = 'mrbs-'.$rel_ver.'.zip';
@@ -65,7 +65,8 @@ sub wanted
     # Binary files are added verbatim
     if ($file =~ m/\.(gif|jpg|png|ics)$/)
     {
-      $zip->addFile($File::Find::name);
+      $zip->addFile($File::Find::name, $File::Find::name,
+                    COMPRESSION_LEVEL_BEST_COMPRESSION);
     }
     else
     {
@@ -77,7 +78,8 @@ sub wanted
       my $file_data = <FILE>;
       close FILE;
       $file_data =~ s/\n/\r\n/g;
-      $zip->addString($file_data, $File::Find::name);
+      $zip->addString($file_data, $File::Find::name,
+                      COMPRESSION_LEVEL_BEST_COMPRESSION);
     }
   }
 }
