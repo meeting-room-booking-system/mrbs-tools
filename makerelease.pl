@@ -17,13 +17,13 @@ $tag =~ s/\./_/g;
 
 $tag = 'mrbs-'.$tag;
 
-#if (-d 'mrbs-'.$rel_ver)
-#{
-#  File::Path::remove_tree('mrbs-'.$rel_ver);
-#}
+if (-d 'mrbs-'.$rel_ver)
+{
+  File::Path::remove_tree('mrbs-'.$rel_ver);
+}
 
-#(system('svn',
-#        'export','http://svn.code.sf.net/p/mrbs/code/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
+(system('svn',
+        'export','http://svn.code.sf.net/p/mrbs/code/mrbs/tags/'.$tag,'mrbs-'.$rel_ver) == 0) or die "Failed to export from SVN\n";
 
 my $tar_filename = 'mrbs-'.$rel_ver.'.tar.gz';
 my $zip_filename = 'mrbs-'.$rel_ver.'.zip';
