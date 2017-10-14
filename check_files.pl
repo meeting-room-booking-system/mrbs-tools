@@ -28,7 +28,7 @@ foreach my $filename (@ARGV)
     }
     elsif ($text =~ m/\r/)
     {
-      print "$filename comtains CR(s)\n";
+      print "$filename contains CR(s)\n";
     }
   }
 }
