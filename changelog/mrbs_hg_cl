@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # Output ChangeLog for currently selected branch
-hg log --style changelog -b `hg branch` > ChangeLog
+hg log --style changelog -f > ChangeLog
