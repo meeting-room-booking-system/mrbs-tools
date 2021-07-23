@@ -1,5 +1,0 @@
-# Glob syntax
-syntax: glob
-
-*~
-*.bak
