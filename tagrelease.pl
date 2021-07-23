@@ -23,6 +23,7 @@ $tag = 'mrbs-'.$tag;
 print "Tag created, need to push outgoing change:\n\n";
 (system('git',
         'log',
+        '--branches',
         '--not',
         '--remotes') == 0) or
     die "Failed to determine outgoing changes\n";
