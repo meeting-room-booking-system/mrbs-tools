@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Output ChangeLog for currently selected branch
+git log --decorate=short --abbrev-commit --compact-summary --stat=70 --pretty=short > ChangeLog

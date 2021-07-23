@@ -11,11 +11,19 @@ $tag =~ s/\./_/g;
 
 $tag = 'mrbs-'.$tag;
 
-system('hg',
-      'archive',
-      '-r', $tag,
-      "mrbs-$rel_ver.tar.gz");
-system('hg',
-      'archive',
-      '-r', $tag,
-      "mrbs-$rel_ver.zip");
+system(
+       'git',
+       'archive',
+       '--format=tar',
+       '-o',
+       "mrbs-$rel_ver.tar.gz",
+       $tag
+      );
+system(
+       'git',
+       'archive',
+       '--format=zip',
+       '-o',
+       "mrbs-$rel_ver.zip",
+       $tag
+      );
