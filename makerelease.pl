@@ -5,16 +5,12 @@ use strict;
 
 my $rel_ver = shift or die "No version specified!\n";
 
-my $tag = $rel_ver;
-
-$tag =~ s/\./_/g;
-
-$tag = 'mrbs-'.$tag;
+my $tag = "v$rel_ver";
 
 system(
        'git',
        'archive',
-       '--format=tar',
+       '--format=tar.gz',
        '-o',
        "mrbs-$rel_ver.tar.gz",
        $tag
