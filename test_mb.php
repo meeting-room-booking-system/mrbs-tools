@@ -119,17 +119,17 @@ test('mb_strrpos', 'AaBb', 'A');
 try {
   test('mb_strrpos', '', 'A', 1);
 }
-catch (\Throwable $e){
+catch (Throwable $e){
 }
 try {
   test('mb_strrpos', 'A', 'A', 2);
 }
-catch (\Throwable $e) {
+catch (Throwable $e) {
 }
 try {
   test('mb_strrpos', 'A', 'A', -2);
 }
-catch (\Throwable $e){
+catch (Throwable $e){
 }
 
 
