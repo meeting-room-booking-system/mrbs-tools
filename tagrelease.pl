@@ -6,11 +6,7 @@ use strict;
 # Config
 my $rel_ver = shift;
 
-my $tag = $rel_ver;
-
-$tag =~ s/\./_/g;
-
-$tag = 'mrbs-'.$tag;
+my $tag = "v$rel_ver";
 
 (system('git',
         'tag',
