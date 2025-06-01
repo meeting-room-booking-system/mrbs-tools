@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 // Program for testing the mbstring function emulations.  Run it in the MRBS directory on systems with
-// and without the mbstring extension enabled.  The rsults should be the same.
+// and without the mbstring extension enabled.  The results should be the same.
 
 error_reporting(-1);
 ini_set('display_errors', '1');
