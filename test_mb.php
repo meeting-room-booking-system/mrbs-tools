@@ -1,38 +1,62 @@
 <?php
 declare(strict_types=1);
 
-// Program for testing the mbstring function emulations.  Run it in the MRBS directory on systems with
-// and without the mbstring extension enabled.  The results should be the same.
+// Program for testing the mbstring function emulations.  Run it in the MRBS directory on a
+// system with the 'mbstring' extension enabled.
+
+include 'defaultincludes.inc';
 
 error_reporting(-1);
 ini_set('display_errors', '1');
 ini_set('max_execution_time', '5');
 
-include 'defaultincludes.inc';
-
-echo "PHP version: " . PHP_VERSION;
-echo "<br>\n";
-echo "mbstring enabled: " . var_export(in_array('mbstring', get_loaded_extensions()), true);
-echo "<br>\n";
-echo "intl enabled: " . var_export(in_array('intl', get_loaded_extensions()), true);
-echo "<br>\n";
-echo "<br>\n";
 
 function test(string $function, string $haystack, string $needle, int $offset=0) : void
 {
   echo "<tr>";
   echo "<td>$function</td><td>$haystack</td><td>$needle</td><td>$offset</td>";
+
+  // Using the mbstring versions
   echo "<td>";
-  echo var_export(call_user_func($function, $haystack, $needle, $offset), true);
+  $mbstring = call_user_func($function, $haystack, $needle, $offset);
+  echo var_export($mbstring, true);
   echo "</td>";
+
+  // Using the MRBS emulations
+  echo "<td>";
+  $mrbs = call_user_func("mrbs_$function", $haystack, $needle, $offset);
+  echo var_export($mrbs, true);
+  echo "</td>";
+
+  // Compare the results
+  $color = ($mbstring === $mrbs) ? "palegreen" : "pink";
+  echo '<td style="background-color: ' . $color . '">';
+  echo ($mbstring === $mrbs) ? 'Pass' : 'Fail';
+  echo "</td>";
+
   echo "</tr>\n";
 }
 
 
+$loaded_extensions = get_loaded_extensions();
+
+echo "PHP version: " . PHP_VERSION;
+echo "<br>\n";
+echo "mbstring enabled: " . var_export(in_array('mbstring', $loaded_extensions), true);
+echo "<br>\n";
+echo "intl enabled: " . var_export(in_array('intl', $loaded_extensions), true);
+echo "<br>\n";
+echo "<br>\n";
+
+if (!in_array('mbstring', $loaded_extensions))
+{
+  die("This test needs the 'mbstring' PHP extension to be loaded.");
+}
+
 echo "<table>\n";
 echo "<thead>\n";
 echo "<tr>";
-echo '<th>function</th><th>$haystack</th><th>$needle</th><th>$offset</th><th>result</th>';
+echo '<th>function</th><th>$haystack</th><th>$needle</th><th>$offset</th><th>result - mbstring</th><th>result - mrbs</th><th>Summary</th>';
 echo "<tr>\n";
 echo "</thead>\n";
 
