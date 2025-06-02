@@ -18,13 +18,23 @@ function test(string $function, string $haystack, string $needle, int $offset=0)
 
   // Using the mbstring versions
   echo "<td>";
-  $mbstring = call_user_func($function, $haystack, $needle, $offset);
+  try {
+    $mbstring = call_user_func($function, $haystack, $needle, $offset);
+  }
+  catch (Throwable $t) {
+    $mbstring = get_class($t);
+  }
   echo var_export($mbstring, true);
   echo "</td>";
 
   // Using the MRBS emulations
   echo "<td>";
-  $mrbs = call_user_func("mrbs_$function", $haystack, $needle, $offset);
+  try {
+    $mrbs = call_user_func("mrbs_$function", $haystack, $needle, $offset);
+  }
+  catch (Throwable $t) {
+    $mrbs = get_class($t);
+  }
   echo var_export($mrbs, true);
   echo "</td>";
 
@@ -140,21 +150,9 @@ test('mb_strrpos', 'AaBb', 'a');
 test('mb_strrpos', 'AaBb', 'A');
 
 // Offset outside haystack
-try {
-  test('mb_strrpos', '', 'A', 1);
-}
-catch (Throwable $e){
-}
-try {
-  test('mb_strrpos', 'A', 'A', 2);
-}
-catch (Throwable $e) {
-}
-try {
-  test('mb_strrpos', 'A', 'A', -2);
-}
-catch (Throwable $e){
-}
+test('mb_strrpos', '', 'A', 1);
+test('mb_strrpos', 'A', 'A', 2);
+test('mb_strrpos', 'A', 'A', -2);
 
 
 // mb_strripos()
