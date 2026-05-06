@@ -10,7 +10,7 @@ my $tag = "v$rel_ver";
 
 (system('git',
         'tag',
-        '-a',
+        '-s',
         '-m',
         "MRBS $rel_ver",
         $tag) == 0) or
@@ -23,3 +23,4 @@ print "Tag created, need to push outgoing change:\n\n";
         '--not',
         '--remotes') == 0) or
     die "Failed to determine outgoing changes\n";
+
